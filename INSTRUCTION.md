@@ -1,5 +1,4 @@
 # Apache Cassandra
-
 ---
 
 #### Name: Xinyi Chen
