@@ -82,29 +82,120 @@ last_update_timestamp timestamp
 
 ### CRUD Operations
 
-#### Create Data:
+#### Create Data: INSERT
+
+Inserting data for a row using an **INSERT** statement:
 ```
-INSERT INTO store.shopping_cart
-(userid, item_count, last_update_timestamp)
-VALUES ('9876', 2, toTimeStamp(now()));
-INSERT INTO store.shopping_cart
-(userid, item_count, last_update_timestamp)
-VALUES ('1234', 5, toTimeStamp(now()));
+insert_statement::= INSERT INTO table_name ( names_values | json_clause )
+	[ IF NOT EXISTS ]
+	[ USING update_parameter ( AND update_parameter )* ]
+names_values::= names VALUES tuple_literal
+json_clause::= JSON string [ DEFAULT ( NULL | UNSET ) ]
+names::= '(' column_name ( ',' column_name )* ')'
+```
+For example:
+```
+INSERT INTO NerdMovies (movie, director, main_actor, year)
+   VALUES ('Serenity', 'Joss Whedon', 'Nathan Fillion', 2005)
+   USING TTL 86400;
+
+INSERT INTO NerdMovies JSON '{"movie": "Serenity", "director": "Joss Whedon", "year": 2005}';
 ```
 
-#### Read Data:
+#### Read Data: SELECT
+
+Querying data from data using a **SELECT** statement:
 ```
- SELECT * FROM store.shopping_cart;
+select_statement::= SELECT [ JSON | DISTINCT ] ( select_clause | '*' )
+	FROM `table_name`
+	[ WHERE `where_clause` ]
+	[ GROUP BY `group_by_clause` ]
+	[ ORDER BY `ordering_clause` ]
+	[ PER PARTITION LIMIT (`integer` | `bind_marker`) ]
+	[ LIMIT (`integer` | `bind_marker`) ]
+	[ ALLOW FILTERING ]
+select_clause::= `selector` [ AS `identifier` ] ( ',' `selector` [ AS `identifier` ] )
+selector::== `column_name`
+	| `term`
+	| CAST '(' `selector` AS `cql_type` ')'
+	| `function_name` '(' [ `selector` ( ',' `selector` )_ ] ')'
+	| COUNT '(' '_' ')'
+where_clause::= `relation` ( AND `relation` )*
+relation::= column_name operator term
+	'(' column_name ( ',' column_name )* ')' operator tuple_literal
+	TOKEN '(' column_name# ( ',' column_name )* ')' operator term
+operator::= '=' | '<' | '>' | '<=' | '>=' | '!=' | IN | CONTAINS | CONTAINS KEY
+group_by_clause::= column_name ( ',' column_name )*
+ordering_clause::= column_name [ ASC | DESC ] ( ',' column_name [ ASC | DESC ] )*
+```
+For example:
+```
+SELECT name, occupation FROM users WHERE userid IN (199, 200, 207);
+SELECT JSON name, occupation FROM users WHERE userid = 199;
+SELECT name AS user_name, occupation AS user_occupation FROM users;
+
+SELECT time, value
+FROM events
+WHERE event_type = 'myEvent'
+  AND time > '2011-02-03'
+  AND time <= '2012-01-01'
+
+SELECT COUNT (*) AS user_count FROM users;
 ```
 
-#### Write Data:
+#### Write Data: UPDATE
+
+Updating a row using an **UPDATE** statement:
 ```
- INSERT INTO store.shopping_cart (userid, item_count) VALUES ('4567', 20);
+update_statement ::=    UPDATE table_name
+                        [ USING update_parameter ( AND update_parameter )* ]
+                        SET assignment( ',' assignment )*
+                        WHERE where_clause
+                        [ IF ( EXISTS | condition ( AND condition)*) ]
+update_parameter ::= ( TIMESTAMP | TTL ) ( integer | bind_marker )
+assignment: simple_selection'=' term
+                `| column_name'=' column_name ( '+' | '-' ) term
+                | column_name'=' list_literal'+' column_name
+simple_selection ::= column_name
+                        | column_name '[' term']'
+                        | column_name'.' field_name
+condition ::= `simple_selection operator term
+```
+For example:
+```
+ UPDATE NerdMovies USING TTL 400
+   SET director   = 'Joss Whedon',
+       main_actor = 'Nathan Fillion',
+       year       = 2005
+ WHERE movie = 'Serenity';
+
+UPDATE UserActions
+   SET total = total + 2
+   WHERE user = B70DE1D0-9908-4AE3-BE34-5573E5B09F14
+     AND action = 'click';
+```
+
+#### Delete Data: DELETE
+
+Deleting rows or parts of rows using **DELETE** statement:
+```
+delete_statement::= DELETE [ simple_selection ( ',' simple_selection ) ]
+	FROM table_name
+	[ USING update_parameter ( AND update_parameter# )* ]
+	WHERE where_clause
+	[ IF ( EXISTS | condition ( AND condition)*) ]
+```
+For example:
+``` 
+DELETE FROM NerdMovies USING TIMESTAMP 1240003134
+ WHERE movie = 'Serenity';
+
+DELETE phone FROM Users
+ WHERE userid IN (C73DE1D3-AF08-40F3-B124-3FF3E5109F22, B70DE1D0-9908-4AE3-BE34-5573E5B09F14);
 ```
 
 ## Reference
 
 ---
 
-https://cassandra.apache.org/_/index.html
-https://cassandra.apache.org/_/quickstart.html
+https://cassandra.apache.org
