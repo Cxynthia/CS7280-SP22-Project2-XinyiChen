@@ -1,4 +1,4 @@
-# Project 2
+# Apache Cassandra
 
 ---
 
@@ -27,8 +27,8 @@ Official website: https://cassandra.apache.org/
 ### Step 1: Get Cassandra
 
 Apache Cassandra could be downloaded through Docker or similar software. (If Docker is not installed, refer this 
-[link](https://docs.docker.com/get-docker/) to first install Docker.) Use the following code to install Cassandra 
-through Docker:
+[link](https://docs.docker.com/get-docker/) to first install Docker.) Use the following code to install the latest 
+version of the official Apache Cassandra image through Docker:
 
 ```
 docker pull cassandra:latest
@@ -39,10 +39,14 @@ It is also available as a tarball or package download [here](https://cassandra.a
 ### Step 2: Start Cassandra
 
 Use the following code to start Cassandra with Docker:
-
 ```
-docker run --name cassandra cassandra
-docker run --rm -d --name cassandra --hostname cassandra --network cassandra cassandra
+docker run --name cass_cluster cassandra:latest
+```
+The ```--name``` option will be the name of the Cassandra cluster created.
+
+Start the Cassandra Query Language Shell(cqlsh) to interact with the Cassandra node created:
+```
+docker exec -it cass_cluster cqlsh
 ```
 
 ## Operations
