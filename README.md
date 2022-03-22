@@ -25,9 +25,9 @@ Official website: https://cassandra.apache.org/
 ---
 
 Apache Cassandra was initially designed at Facebook to implement a 
-combination of **Amazon’s Dynamo** distributed storage and replication techniques and **Google’s Bigtable** data and storage 
-engine model. Cassandra was designed as a best-in-class combination of both systems to meet emerging largescale, both in data 
-footprint and query volume, storage requirements. 
+combination of **Amazon’s Dynamo** distributed storage and replication techniques and **Google’s Bigtable** data and 
+storage engine model. Cassandra was designed as a best-in-class combination of both systems to meet emerging large 
+scale, both in data footprint and query volume, storage requirements. 
 
 Cassandra is designed following these design objectives:
 - Full multi-master database replication
@@ -40,7 +40,7 @@ Cassandra is designed following these design objectives:
 
 #### Dynamo
 
-Apache Cassandra relies on Amazon's Dynamo distributed storage key-value system, especially on the following styels:
+Apache Cassandra relies on Amazon's Dynamo distributed storage key-value system, especially on the following styles:
 - Dataset partitioning using consistent hashing
 - multi-master replication using versioned data and tunable consistency
 - Distributed cluster membership and failure detection via a gossip protocol
@@ -61,17 +61,13 @@ memtables are flushed onto disk and stored as immutable SSTables.
 ---
 
 Apache Cassandra stores data in tables, and uses CQL to query the data in table. The data model is based around and 
-optimized for querying. 
-
-#### Query-driven Modeling
-
-In Cassandra, data modeling is query-driven. The data access patterns and application queries determine the structure 
-and organization of data which is then used to design the database tables.
+optimized for querying. The data access patterns and application queries determine the structure and organization of 
+data which is then used to design the database tables.
 
 #### Partitions
 
 Apache Cassandra is a distributed system which stores data across a cluster of nodes. Therefore, a partition key is 
-needed to distribute data evenly among the cluster. Making the number of partition read fr a query as low as possible 
+needed to distribute data evenly among the cluster. Making the number of partition read for a query as low as possible 
 is the key to reduce latency and overhead. Because different partitions could be located on different nodes so the 
 coordinator need to send requests to every node. This would be more efficient though all the partitions involved in on 
 query are on the same node.
@@ -81,8 +77,9 @@ used in the analyzation include the partition size, data redundancy, disk space,
 
 ## Applications
 
-Apache Cassandra is used by various notable organizations, such as Apple, Netflix, Reddit, etc. It has a vast area of application, and it is used by various organizations across the world. Some of the 
-major applications are listed below:
+Apache Cassandra is used by various notable organizations, such as Apple, Netflix, Reddit, etc. It has a vast area of 
+application. Some of the major applications are listed below:
+
 - **Storage**: User can store any kind of data in various nodes provided by Apache Cassandra.
 - **Back-end Development Applications**: Cassandra provides a wide platform for the back-end development and a huge 
 database for the data.
