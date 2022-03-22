@@ -1,7 +1,6 @@
 # Apache Cassandra
 
 ---
-
 #### Name: Xinyi Chen
 #### NUID: 001537334
 
